@@ -38,18 +38,18 @@ class Tweet extends Component {
     render() {
         return (
             <article className="tweet">
-                <div className="tweet__cabecalho">
+                <div className="tweet__cabecalho" onClick={ this.props.abreModalHandler }>
                     <img className="tweet__fotoUsuario" src={ this.props.usuario.foto } alt="" />
                     <span className="tweet__nomeUsuario">{ this.props.usuario.nome }</span>
                     <a href=""><span className="tweet__userName">@{ this.props.usuario.nome }</span></a>
                 </div>
-                <p className="tweet__conteudo">
+                <p className="tweet__conteudo" onClick={ this.props.abreModalHandler }>
                     { this.props.texto }
                 </p>
                 <footer className="tweet__footer">
                 {
                     this.props.removivel && 
-                    <button onClick={ this.removeHandler } className="btn btn--blue btn--remove">
+                    <button onClick={ this.props.removeHandler } className="btn btn--blue btn--remove">
                         X
                     </button>
                 }

@@ -6,13 +6,15 @@ import Widget from '../../components/Widget'
 import TrendsArea from '../../components/TrendsArea'
 import Tweet from '../../components/Tweet'
 import Helmet from 'react-helmet'
+import Modal from '../../components/Modal/Modal'
 
 class Home extends Component {
     constructor() {
         super();
         this.state = {
             novoTweet: '',
-            tweets: []
+            tweets: [],
+            tweetAtivo: {}
         }
         
         //o local certo para fazer isso é no route
@@ -69,6 +71,17 @@ class Home extends Component {
             })
         })
 
+    }
+
+    abreModal = (idDoTweetQueVaiNoModal) => {
+        const tweetQueVaiFicarAtivo = this.state.tweets.find((tweetAtual) => {
+            return tweetAtual._id === idDoTweetQueVaiNoModal
+        })
+        this.setState({
+            tweetAtivo: tweetQueVaiFicarAtivo
+        })
+
+        console.log("tweetQueVaiFicarAtivo ", tweetQueVaiFicarAtivo);
     }
 
     render() {
@@ -130,6 +143,9 @@ class Home extends Component {
                                                 id={tweetAtual._id}
                                                 removeHandler={() => { 
                                                     this.removeOTweet(tweetAtual._id)
+                                                }}
+                                                abreModalHandler={() => {
+                                                    this.abreModal(tweetAtual._id)
                                                 }}/>
                                     })
                                     :  "carregando"
@@ -138,6 +154,20 @@ class Home extends Component {
                         </Widget>
                     </Dashboard>
                 </div>
+
+                <Modal isAberto={ Boolean(this.state.tweetAtivo._id) }>
+                    {
+                        Boolean(this.state.tweetAtivo._id) &&
+                        <Widget>
+                            <Tweet 
+                                id={ this.state.tweetAtivo._id }
+                                texto={ this.state.tweetAtivo.conteudo }
+                                usuario={ this.state.tweetAtivo.usuario }
+                                />
+                        </Widget>
+                    }
+                </Modal>
+
             </Fragment>
         );
     }
