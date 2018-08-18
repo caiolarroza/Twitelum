@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './tweet.css'
+import PropTypes from 'prop-types'
 
 class Tweet extends Component {
 
@@ -29,6 +30,11 @@ class Tweet extends Component {
         })
     }
 
+    removeHandler = () => {
+        console.log("asd");
+        this.props.removeHandler();
+    }
+
     render() {
         return (
             <article className="tweet">
@@ -43,7 +49,7 @@ class Tweet extends Component {
                 <footer className="tweet__footer">
                 {
                     this.props.removivel && 
-                    <button className="btn btn--blue btn--remove">
+                    <button onClick={ this.removeHandler } className="btn btn--blue btn--remove">
                         X
                     </button>
                 }
@@ -71,6 +77,20 @@ class Tweet extends Component {
             </article>
         )
     }
+}
+
+Tweet.propTypes = {
+    id: PropTypes.string.isRequired,
+    texto: PropTypes.string.isRequired,
+    removivel: PropTypes.bool,
+    likeado: PropTypes.bool,
+    totalLikes: PropTypes.number,
+    removeHandler: PropTypes.func,
+    usuario: PropTypes.shape({
+        foto: PropTypes.string,
+        nome: PropTypes.string,
+        login: PropTypes.string
+    }).isRequired
 }
 
 export default Tweet

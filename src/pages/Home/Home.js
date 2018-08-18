@@ -51,6 +51,26 @@ class Home extends Component {
         }
     }
 
+    removeOTweet = (idDoTweet) => {
+        console.log("vamo q vamo", idDoTweet)
+        const listaAtualizada = this.state.tweets.filter((tweetAtual) => {
+                return tweetAtual._id !== idDoTweet
+        })
+        
+        fetch(`http://twitelum-api.herokuapp.com/tweets/${idDoTweet}?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
+                method: 'DELETE',
+                body: JSON.stringify({ conteudo: this.state.novoTweet })
+        })
+        .then( (resposta) => resposta.json())
+        .then( (respostaConvertidaEmObjeto) => {
+            console.log(respostaConvertidaEmObjeto)
+            this.setState({
+                tweets: listaAtualizada
+            })
+        })
+
+    }
+
     render() {
         return (
             <Fragment>
@@ -99,7 +119,7 @@ class Home extends Component {
                             <div className="tweetsArea">
                                 {
                                     this.state.tweets.length > 0
-                                    ?this.state.tweets.map(function(tweetAtual, indice) {
+                                    ?this.state.tweets.map((tweetAtual, indice) => {
                                         return <Tweet 
                                                 key={tweetAtual._id}
                                                 removivel={tweetAtual.removivel} 
@@ -107,7 +127,10 @@ class Home extends Component {
                                                 usuario={tweetAtual.usuario}
                                                 totalLikes={tweetAtual.totalLikes}
                                                 likeado={tweetAtual.likeado}
-                                                id={tweetAtual._id}/>
+                                                id={tweetAtual._id}
+                                                removeHandler={() => { 
+                                                    this.removeOTweet(tweetAtual._id)
+                                                }}/>
                                     })
                                     :  "carregando"
                                 }
