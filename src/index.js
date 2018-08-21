@@ -15,6 +15,7 @@ import './assets/css/novoTweet.css'
 import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter } from 'react-router-dom';
 import Routes from './routes';
+import './store';
 
 ReactDOM.render(
     <BrowserRouter>

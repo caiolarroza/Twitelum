@@ -14,6 +14,8 @@ class Tweet extends Component {
     
     likeHandler = () => {
         const { likeado, totalLikes } = this.state
+        console.log("likeado ", likeado)
+        console.log("totalLikes ", totalLikes)
         this.setState({
             likeado: !likeado,
             totalLikes: likeado ? totalLikes - 1 : totalLikes + 1
@@ -28,6 +30,8 @@ class Tweet extends Component {
         .then((respostaDoServerEmObjeto) => {
 
         })
+
+        console.log("staaaaaaate", this.state)
     }
 
     removeHandler = () => {
@@ -50,6 +54,12 @@ class Tweet extends Component {
                 {
                     this.props.removivel && 
                     <button onClick={ this.props.removeHandler } className="btn btn--blue btn--remove">
+                        X
+                    </button>
+                }
+                {
+                    this.props.isModal &&
+                    <button onClick={ this.props.fechaModalHandler } className="btn btn--blue btn--remove">
                         X
                     </button>
                 }
