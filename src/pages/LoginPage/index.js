@@ -44,7 +44,7 @@ class LoginPage extends Component {
                                     className="loginPage__input" 
                                     type="text" 
                                     id="login" 
-                                    value="omariosouto"
+                                    value="marcobrunobr"
                                     name="login"/>
                             </div>
                             <div className="loginPage__inputWrap">

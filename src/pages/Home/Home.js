@@ -7,10 +7,13 @@ import TrendsArea from '../../components/TrendsArea'
 import Tweet from '../../components/Tweet'
 import Helmet from 'react-helmet'
 import Modal from '../../components/Modal/Modal'
+import PropTypes from 'prop-types'
+import * as TweetsActions from '../../actions/TweetsActions'
 
 class Home extends Component {
     constructor() {
         super();
+
         this.state = {
             novoTweet: '',
             tweets: [],
@@ -21,21 +24,23 @@ class Home extends Component {
         /* if(!localStorage.getItem('TOKEN')) {
             props.history.push('/login')
         }*/
+
+        console.log("asd", this.context)
+    }
+
+    static contextTypes = {
+        store: PropTypes.object
     }
 
     componentDidMount() {
 
-        window.store.subscribe(() => {
+        this.context.store.subscribe(() => {
             this.setState({
-                tweets: window.store.getState()
+                tweets: this.context.store.getState()
             })
         })
 
-        fetch(`http://twitelum-api.herokuapp.com/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`)
-        .then( (respostaDoServidor) => respostaDoServidor.json() )
-        .then( (tweetsVindosDoServidor) => {
-            window.store.dispatch({type: 'CARREGA_TWEETS', tweets:tweetsVindosDoServidor})
-        })
+        this.context.store.dispatch(TweetsActions.carregaTweets());
     }
 
     adicionaTweet = (event) => { //stage 3 do TC39

@@ -1,4 +1,5 @@
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 
 const stateInicial = [];
 
@@ -9,4 +10,7 @@ function tweetsReducer(stateDentroDaStore = stateInicial, acaoDisparadaPeloDev) 
     }
     return stateDentroDaStore;
 }
-window.store = createStore(tweetsReducer)
+
+export default createStore(tweetsReducer, 
+    applyMiddleware(thunk)
+)
