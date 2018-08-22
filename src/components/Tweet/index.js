@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './tweet.css'
 import PropTypes from 'prop-types'
+import * as TweetsActions from '../../actions/TweetsActions'
 
 class Tweet extends Component {
 
@@ -11,7 +12,11 @@ class Tweet extends Component {
             totalLikes: props.totalLikes
         }
     }
-    
+
+    /*static contextTypes = {
+        store: PropTypes.object
+    }*/
+        
     likeHandler = () => {
         const { likeado, totalLikes } = this.state
         console.log("likeado ", likeado)
@@ -34,10 +39,13 @@ class Tweet extends Component {
         console.log("staaaaaaate", this.state)
     }
 
-    removeHandler = () => {
+    //saiu daqui e está no TweetContainer
+    /*removeHandler = () => {
         console.log("asd");
-        this.props.removeHandler();
-    }
+        const idDoTweet = this.props.id
+        this.context.store.dispatch(TweetsActions.removeTweet(idDoTweet))
+
+    }*/
 
     render() {
         return (

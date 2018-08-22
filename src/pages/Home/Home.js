@@ -4,7 +4,7 @@ import NavMenu from '../../components/NavMenu'
 import Dashboard from '../../components/Dashboard'
 import Widget from '../../components/Widget'
 import TrendsArea from '../../components/TrendsArea'
-import Tweet from '../../components/Tweet'
+import Tweet from '../../containers/TweetContainer'
 import Helmet from 'react-helmet'
 import Modal from '../../components/Modal/Modal'
 import PropTypes from 'prop-types'
@@ -33,7 +33,6 @@ class Home extends Component {
     }
 
     componentDidMount() {
-
         this.context.store.subscribe(() => {
             this.setState({
                 tweets: this.context.store.getState()
@@ -47,41 +46,44 @@ class Home extends Component {
         event.preventDefault();
         //valida o conteudo
         if(this.state.novoTweet) {
-            fetch(`http://twitelum-api.herokuapp.com/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
-                method: 'POST',
-                body: JSON.stringify({ conteudo: this.state.novoTweet })
-            })
-            .then((respostaDoServidor) => {
-                return respostaDoServidor.json()
-            })
-            .then((respostaConvertidaEmObjeto) => {
-                this.setState({
-                    tweets: [respostaConvertidaEmObjeto, ...this.state.tweets],
-                    novoTweet: ''
-                })
+            //TweetsActions.adicionaTweet(this.state.novoTweet)(this.context.store.dispatch) -> poderia ser assim a linha de baixo
+            this.context
+                .store.dispatch(TweetsActions.adicionaTweet(this.state.novoTweet))
+            
+            this.setState({
+                novoTweet: ''
             })
         }
     }
 
-    removeOTweet = (idDoTweet) => {
+    //saiu daqui e foi para o Tweet e depois tiramos do Tweet e colocamos no TweetContainer
+    /*removeOTweet = (idDoTweet) => {
         console.log("vamo q vamo", idDoTweet)
-        const listaAtualizada = this.state.tweets.filter((tweetAtual) => {
-                return tweetAtual._id !== idDoTweet
-        })
         
-        fetch(`http://twitelum-api.herokuapp.com/tweets/${idDoTweet}?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
-                method: 'DELETE',
-                body: JSON.stringify({ conteudo: this.state.novoTweet })
-        })
-        .then( (resposta) => resposta.json())
-        .then( (respostaConvertidaEmObjeto) => {
-            console.log(respostaConvertidaEmObjeto)
-            this.setState({
-                tweets: listaAtualizada
-            })
-        })
+        //o que estava funcionando por ultimo
+        // this.context.store.dispatch(TweetsActions.removeTweet(idDoTweet))
 
-    }
+        //meu -- errado pq usei filter inves de find
+        //this.context.store.dispatch(TweetsActions.removeTweet(this.state.tweets, idDoTweet))
+
+        //old foi a primeira versão, sem redux
+            const listaAtualizada = this.state.tweets.filter((tweetAtual) => {
+                    return tweetAtual._id !== idDoTweet
+            })
+
+        //esse cara ta aqui só pra mostrar que dava pra fazer também direto na store
+        //    fetch(`http://twitelum-api.herokuapp.com/tweets/${idDoTweet}?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
+        //        method: 'DELETE',
+        //        body: JSON.stringify({ conteudo: this.state.novoTweet })
+        //    })
+        //    .then( (resposta) => resposta.json())
+        //    .then( (respostaConvertidaEmObjeto) => {
+        //        console.log(respostaConvertidaEmObjeto)
+        //        this.context
+        //        .store.dispatch({ type: 'REMOVE_TWEET', idDoTweetQueVaiSumir: idDoTweet })
+        //    })
+
+    }*/
 
     abreModal = (idDoTweetQueVaiNoModal) => {
         const tweetQueVaiFicarAtivo = this.state.tweets.find((tweetAtual) => {
@@ -169,9 +171,6 @@ class Home extends Component {
                                                 totalLikes={tweetAtual.totalLikes}
                                                 likeado={tweetAtual.likeado}
                                                 id={tweetAtual._id}
-                                                removeHandler={() => { 
-                                                    this.removeOTweet(tweetAtual._id)
-                                                }}
                                                 abreModalHandler={() => {
                                                     this.abreModal(tweetAtual._id)
                                                 }}/>
