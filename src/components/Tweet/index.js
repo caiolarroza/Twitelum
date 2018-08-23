@@ -12,12 +12,14 @@ class Tweet extends Component {
         }
     }
 
-    /*static contextTypes = {
+    static contextTypes = {
         store: PropTypes.object
-    }*/
+    }
         
     likeHandler = () => {
-        const { likeado, totalLikes } = this.state
+        this.context.store.dispatch({ type: 'LIKE', idDoTweet: this.props.id })
+        //antigo antes de mandar pro store
+        /*const { likeado, totalLikes } = this.state
         this.setState({
             likeado: !likeado,
             totalLikes: likeado ? totalLikes - 1 : totalLikes + 1
@@ -31,7 +33,7 @@ class Tweet extends Component {
         })
         .then((respostaDoServerEmObjeto) => {
 
-        })
+        })*/
 
     }
 
@@ -74,7 +76,7 @@ class Tweet extends Component {
                         <svg className={`
                             icon icon--small iconHeart 
                             ${
-                                this.state.likeado
+                                this.props.likeado
                                 ? 'iconHeart--active'
                                 : ''
                             }
@@ -88,7 +90,7 @@ class Tweet extends Component {
                                 <path d="M36.885 25.166c0 5.45-4.418 9.868-9.867 9.868-3.308 0-6.227-1.632-8.018-4.128-1.79 2.496-4.71 4.129-8.017 4.129-5.45 0-9.868-4.418-9.868-9.868 0-.773.098-1.52.266-2.242C2.75 14.413 12.216 5.431 19 2.965c6.783 2.466 16.249 11.448 17.617 19.96.17.721.268 1.47.268 2.241"></path>
                             </g>
                         </svg>
-                        { this.state.totalLikes }
+                        { this.props.totalLikes }
                     </button>
                 </footer>
             </article>

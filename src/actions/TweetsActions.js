@@ -20,7 +20,6 @@ export const adicionaTweet = (novoTweet) => {
             return respostaDoServidor.json()
         })
         .then((respostaConvertidaEmObjeto) => {
-            console.log('Que danado que aconteceu ', respostaConvertidaEmObjeto);
             dispatch({ type: 'ADD_TWEET', tweet: respostaConvertidaEmObjeto })
         })
     }// fecha a function

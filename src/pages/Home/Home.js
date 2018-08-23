@@ -32,10 +32,14 @@ class Home extends Component {
     }
 
     componentDidMount() {
+        console.log("this.context.store.getState()", this.context.store.getState())
+        //pra testar a notificacao no console
+        //window.store.dispatch( { type:'ADD_NOTIFICACAO', msg:"asd"} )
+            window.store = this.context.store
         this.context.store.subscribe(() => {
             this.setState({
-                tweets: this.context.store.getState().tweets,
-                tweetAtivo: this.context.store.getState().tweetAtivo
+                tweets: this.context.store.getState().tweets.tweets,
+                tweetAtivo: this.context.store.getState().tweets.tweetAtivo
                 
             })
         })
@@ -202,7 +206,14 @@ class Home extends Component {
                         </Widget>
                     }
                 </Modal>
-
+                {
+                    this.context.store.getState().notificacao && 
+                    <div className="notificacaoMsg" onAnimationEnd={() => {
+                        this.context.store.dispatch({ type: 'REMOVE_NOTIFICACAO'})
+                    }}>
+                        { this.context.store.getState().notificacao }
+                    </div>
+                }
             </Fragment>
         );
     }
