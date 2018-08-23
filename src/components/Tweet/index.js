@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import './tweet.css'
 import PropTypes from 'prop-types'
-import * as TweetsActions from '../../actions/TweetsActions'
 
 class Tweet extends Component {
 
@@ -19,8 +18,6 @@ class Tweet extends Component {
         
     likeHandler = () => {
         const { likeado, totalLikes } = this.state
-        console.log("likeado ", likeado)
-        console.log("totalLikes ", totalLikes)
         this.setState({
             likeado: !likeado,
             totalLikes: likeado ? totalLikes - 1 : totalLikes + 1
@@ -36,16 +33,24 @@ class Tweet extends Component {
 
         })
 
-        console.log("staaaaaaate", this.state)
     }
 
     //saiu daqui e está no TweetContainer
     /*removeHandler = () => {
-        console.log("asd");
         const idDoTweet = this.props.id
         this.context.store.dispatch(TweetsActions.removeTweet(idDoTweet))
 
     }*/
+    
+    //esse era o meu jeito de fazer o fechaModal
+    /*
+         {
+                    this.props.isModal &&
+                    <button onClick={ this.props.fechaModalHandler } className="btn btn--blue btn--remove">
+                        X
+                    </button>
+                }
+    */
 
     render() {
         return (
@@ -62,12 +67,6 @@ class Tweet extends Component {
                 {
                     this.props.removivel && 
                     <button onClick={ this.props.removeHandler } className="btn btn--blue btn--remove">
-                        X
-                    </button>
-                }
-                {
-                    this.props.isModal &&
-                    <button onClick={ this.props.fechaModalHandler } className="btn btn--blue btn--remove">
                         X
                     </button>
                 }

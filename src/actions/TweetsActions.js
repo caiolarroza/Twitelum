@@ -26,17 +26,17 @@ export const adicionaTweet = (novoTweet) => {
     }// fecha a function
 }//fecha o adicionaTweet
 
-export const deletaTweet = (tweets, idDoTweet) => {
+/*export const deletaTweet = (tweets, idDoTweet) => {
     return function(dispatch) {
         console.log("tweets",tweets)
         console.log("idDoTweet",idDoTweet)
         const listaAtualizada = tweets.filter((tweetAtual) => {
-            if (tweetAtual._id == idDoTweet) {
+            if (tweetAtual._id === idDoTweet) {
                 dispatch({ type: 'REMOVE_TWEET', tweet: tweetAtual})
             }
         })
     }
-}
+}*/
 
 export const removeTweet = (idDoTweet) => {
     return function(dispatch) {

@@ -25,7 +25,6 @@ class Home extends Component {
             props.history.push('/login')
         }*/
 
-        console.log("asd", this.context)
     }
 
     static contextTypes = {
@@ -35,10 +34,11 @@ class Home extends Component {
     componentDidMount() {
         this.context.store.subscribe(() => {
             this.setState({
-                tweets: this.context.store.getState()
+                tweets: this.context.store.getState().tweets,
+                tweetAtivo: this.context.store.getState().tweetAtivo
+                
             })
         })
-
         this.context.store.dispatch(TweetsActions.carregaTweets());
     }
 
@@ -58,7 +58,6 @@ class Home extends Component {
 
     //saiu daqui e foi para o Tweet e depois tiramos do Tweet e colocamos no TweetContainer
     /*removeOTweet = (idDoTweet) => {
-        console.log("vamo q vamo", idDoTweet)
         
         //o que estava funcionando por ultimo
         // this.context.store.dispatch(TweetsActions.removeTweet(idDoTweet))
@@ -78,7 +77,6 @@ class Home extends Component {
         //    })
         //    .then( (resposta) => resposta.json())
         //    .then( (respostaConvertidaEmObjeto) => {
-        //        console.log(respostaConvertidaEmObjeto)
         //        this.context
         //        .store.dispatch({ type: 'REMOVE_TWEET', idDoTweetQueVaiSumir: idDoTweet })
         //    })
@@ -86,14 +84,18 @@ class Home extends Component {
     }*/
 
     abreModal = (idDoTweetQueVaiNoModal) => {
-        const tweetQueVaiFicarAtivo = this.state.tweets.find((tweetAtual) => {
-            return tweetAtual._id === idDoTweetQueVaiNoModal
-        })
-        this.setState({
-            tweetAtivo: tweetQueVaiFicarAtivo
-        })
+        //codigo antigo antes de passar tudo pra store
+            /*const tweetQueVaiFicarAtivo = this.state.tweets.find((tweetAtual) => {
+                return tweetAtual._id === idDoTweetQueVaiNoModal
+            })
+            this.setState({
+                tweetAtivo: tweetQueVaiFicarAtivo
+            })*/
 
-        console.log("tweetQueVaiFicarAtivo ", tweetQueVaiFicarAtivo);
+        this.context.store.dispatch({ 
+            type: 'ABRE_MODAL', 
+            idDoTweetQueVaiNoModal: idDoTweetQueVaiNoModal
+        })
     }
 
     fechaModal = () => {
@@ -107,9 +109,7 @@ class Home extends Component {
         const ehModal = elementoAlvo.classList.contains('modal');
 
         if(ehModal) {
-            this.setState({
-                tweetAtivo: {}
-            })
+            this.context.store.dispatch({type: 'FECHA_MODAL' })
         }
 
     }
@@ -118,7 +118,7 @@ class Home extends Component {
         return (
             <Fragment>
                 <Helmet>
-                    <title>Twitelum Tweets - ({ `${ this.state.tweets.length}`})</title>
+                    <title>Twitelum Tweets - ({ `${ this.state.tweets.length }`})</title>
                 </Helmet>
                 <Cabecalho>
                     <NavMenu usuario="@caiolarroza" />
@@ -197,6 +197,7 @@ class Home extends Component {
                                 }}
                                 totalLikes={this.state.tweetAtivo.totalLikes}
                                 likeado={this.state.tweetAtivo.likeado}
+                                removivel={ this.state.tweetAtivo.removivel }
                                 />
                         </Widget>
                     }

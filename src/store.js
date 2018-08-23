@@ -1,40 +1,62 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-const stateInicial = [];
+const stateInicial = { 
+    tweets: [], 
+    tweetAtivo: {}
+};
 
 function tweetsReducer(stateDentroDaStore = stateInicial, acaoDisparadaPeloDev) {
-    console.log("stateDentroDaStore ", stateDentroDaStore)
-    console.log("stateInicial ", stateInicial)
     if(acaoDisparadaPeloDev.type === 'CARREGA_TWEETS') {
-        console.log('Tentando carregar tweets')
-        return acaoDisparadaPeloDev.tweets
+        return {
+            ...stateDentroDaStore,
+            tweets: acaoDisparadaPeloDev.tweets
+        }
     }
 
     if(acaoDisparadaPeloDev.type === 'ADD_TWEET') {
-        console.log(acaoDisparadaPeloDev);
-        const tweetsAntigos = stateDentroDaStore;
+        const tweetsAntigos = stateDentroDaStore.tweets;
         const tweetNovo = acaoDisparadaPeloDev.tweet;
 
-        return [tweetNovo, ...tweetsAntigos];
+        return {
+            ...stateDentroDaStore,
+            tweets: [tweetNovo, ...tweetsAntigos]
+        };
     }
 
     if(acaoDisparadaPeloDev.type === 'REMOVE_TWEET') {
         /*console.log("acaoDisparadaPeloDev ", acaoDisparadaPeloDev)
-        console.log("stateDentroDaStore ", stateDentroDaStore)
         const index = stateDentroDaStore.indexOf(acaoDisparadaPeloDev.tweet); meu daria certo se fosse find ao inves de filter
         console.log("index", index)
         const teste = stateDentroDaStore.splice(index, 1); meu
         console.log("teste ", teste)
         return teste*/
         const idDoTweetQueVaiSumir = acaoDisparadaPeloDev.idDoTweetQueVaiSumir
-        const listaAtualizadaDeTweets = stateDentroDaStore.filter((tweetAtual) =>{
+        const listaAtualizadaDeTweets = stateDentroDaStore.tweets.filter((tweetAtual) =>{
             return tweetAtual._id !== idDoTweetQueVaiSumir
         })
 
-        return listaAtualizadaDeTweets
+        return { ...stateDentroDaStore, tweets: listaAtualizadaDeTweets }
     }
 
+    if(acaoDisparadaPeloDev.type === 'ABRE_MODAL') {
+        const idDoTweetQueVaiNoModal = acaoDisparadaPeloDev.idDoTweetQueVaiNoModal
+        const tweetQueVaiFicarAtivo = stateDentroDaStore.tweets.find((tweetAtual) => {
+            return tweetAtual._id === idDoTweetQueVaiNoModal
+        })
+
+        return {
+            ...stateDentroDaStore,
+            tweetAtivo: tweetQueVaiFicarAtivo
+        }
+    }
+
+    if(acaoDisparadaPeloDev.type === 'FECHA_MODAL') {
+        return {
+            ...stateDentroDaStore,
+            tweetAtivo: {}
+        }
+    }
     return stateDentroDaStore;
 }
 
